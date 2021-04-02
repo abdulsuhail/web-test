@@ -7,13 +7,12 @@ const { keyword } = require("color-convert");
 
 const WPT_BUDGET = core.getInput('budget');
 const WPT_OPTIONS = core.getInput('wptOptions');
-const WPT_API_KEY = "02e4ab14cdde40fdaccf1cec5543c886"
+const WPT_API_KEY = core.getInput('apiKey');
 const WPT_URLS = core.getInput('urls').split("\n");
 const WPT_LABEL = core.getInput('label');
 const GITHUB_TOKEN = core.getInput('GITHUB_TOKEN');
 const DIRECTORY = process.env.GITHUB_WORKSPACE;
-// const GH_EVENT_NAME = process.env.GITHUB_EVENT_NAME;
-const GH_EVENT_NAME = "pull_request"
+const GH_EVENT_NAME = process.env.GITHUB_EVENT_NAME;
 const METRICS = {
     "TTFB": "Time to First Byte",
     "firstContentfulPaint": "First Contentful Paint",
@@ -73,7 +72,6 @@ async function renderComment(data) {
             body: markdown
         });
     } catch (e) {
-        core.setFailed(JSON.parse(JSON.stringify(e)))
         core.setFailed(`Action failed with error ${e}`);
     }
 }
@@ -140,7 +138,6 @@ async function run() {
 
     Promise.all(WPT_URLS.map(async url=> {
         try {
-            url = "https://isageapp.com/healthcare.html/"
             await runTest(wpt, url, options)
                 .then(async result => {
                     try {
@@ -179,14 +176,11 @@ async function run() {
                             return;
                         }
                     } catch (e) {
-                        core.setFailed(JSON.parse(JSON.stringify(e)))
                         core.setFailed(`Action failed with error ${e}`);
                     }
                     
                 });
             } catch (e) {
-                core.setFailed(JSON.parse(JSON.stringify(e)))
-
                 core.setFailed(`Action failed with error ${e}`);
             }
     })).then(() => {
