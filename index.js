@@ -4,8 +4,7 @@ const github = require('@actions/github');
 const ejs = require('ejs');
 const { cornflowerblue } = require("color-name");
 const { keyword } = require("color-convert");
-const ngrok = require('ngrok');
-
+const urlFinder = require('./fetchUrl');
 const WPT_BUDGET = core.getInput('budget');
 const WPT_OPTIONS = core.getInput('wptOptions');
 const WPT_API_KEY = core.getInput('apiKey');
@@ -143,7 +142,8 @@ async function run() {
     if(!WPT_URLS[0])
     {
         WPT_URLS = [];
-        WPT_URLS.push(await ngrok.connect(9000))
+        let url = await urlFinder.getUrl();
+        WPT_URLS.push(url)
     }
     // WPT_URLS = WPT_URLS[0] ? WPT_URLS : await ngrok.connect(9000);
     console.log(WPT_URLS)
