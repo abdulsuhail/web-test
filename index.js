@@ -8,7 +8,8 @@ const ngrok = require('ngrok');
 
 const WPT_BUDGET = core.getInput('budget');
 const WPT_OPTIONS = core.getInput('wptOptions');
-const WPT_API_KEY = core.getInput('apiKey');
+// const WPT_API_KEY = core.getInput('apiKey');
+const WPT_API_KEY = '3ca739daa5ef49b68cad94b71c92e9d0'
 let WPT_URLS = core.getInput('urls').split("\n");
 const WPT_LABEL = core.getInput('label');
 const GITHUB_TOKEN = core.getInput('GITHUB_TOKEN');
@@ -139,8 +140,10 @@ async function run() {
     let runData = {};
     runData["tests"] = [];
     // console.log
+    
     if(!WPT_URLS[0])
     {
+        WPT_URLS = [];
         WPT_URLS.push(await ngrok.connect(9000))
     }
     // WPT_URLS = WPT_URLS[0] ? WPT_URLS : await ngrok.connect(9000);
@@ -196,9 +199,10 @@ async function run() {
 
                 core.setFailed(`Action failed with error ${e}`);
             }
-    })).then(() => {
+    })).then(async () => {
         if (GH_EVENT_NAME == 'pull_request') {
-            renderComment(runData);
+            await renderComment(runData);
+            process.exit(1);
         }
     });
     
