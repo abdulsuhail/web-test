@@ -16,26 +16,7 @@ exports.getUrl = () =>{
         
                 const { public_url: url } = tunnels.find(({ proto }) => proto === "https");
                 resolve(url)
-                // console.log(url);
-        
-                // Copy to clipboard
-                switch (process.platform) {
-                    case "win32":
-                        execSync(`echo ${url} | clip`);
-                        break;
-                    
-                    case "darwin":
-                        execSync(`echo ${url} | pbcopy`);
-                        break;
-                        
-                    case "linux":
-                        // NOTE: this requires xclip to be installed
-                        execSync(`echo ${url} | xclip -selection clipboard`);
-                        break;
-                        
-                    default:
-                        break;
-                }
+                
             });
         });
     })

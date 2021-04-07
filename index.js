@@ -201,7 +201,6 @@ async function run() {
     })).then(async () => {
         if (GH_EVENT_NAME == 'pull_request') {
             await renderComment(runData);
-            process.exit(1);
         }
     });
     
