@@ -15,11 +15,6 @@ const GITHUB_TOKEN = core.getInput('GITHUB_TOKEN');
 const DIRECTORY = process.env.GITHUB_WORKSPACE;
 const GH_EVENT_NAME = process.env.GITHUB_EVENT_NAME;
 
-(async function() {
-    WPT_URLS = await ngrok.connect(9000);
-    // process.env.WPT_URL = url;
-    // console.log(process.env.WPT_URL)
-  })();
 const METRICS = {
     "TTFB": "Time to First Byte",
     "firstContentfulPaint": "First Contentful Paint",
@@ -79,6 +74,7 @@ async function renderComment(data) {
             body: markdown
         });
     } catch (e) {
+        console.log(JSON.parse(JSON.stringify(e)))
         core.setFailed(`Action failed with error ${e}`);
     }
 }
@@ -142,7 +138,13 @@ async function run() {
     //for our commit
     let runData = {};
     runData["tests"] = [];
-
+    // console.log
+    if(!WPT_URLS[0])
+    {
+        WPT_URLS.push(await ngrok.connect(9000))
+    }
+    // WPT_URLS = WPT_URLS[0] ? WPT_URLS : await ngrok.connect(9000);
+    console.log(WPT_URLS)
     Promise.all(WPT_URLS.map(async url=> {
         try {
             await runTest(wpt, url, options)
@@ -183,11 +185,15 @@ async function run() {
                             return;
                         }
                     } catch (e) {
+                        console.log(JSON.parse(JSON.stringify(e)))
+
                         core.setFailed(`Action failed with error ${e}`);
                     }
                     
                 });
             } catch (e) {
+                console.log(JSON.parse(JSON.stringify(e)))
+
                 core.setFailed(`Action failed with error ${e}`);
             }
     })).then(() => {
