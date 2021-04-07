@@ -4,6 +4,7 @@ const github = require('@actions/github');
 const ejs = require('ejs');
 const { cornflowerblue } = require("color-name");
 const { keyword } = require("color-convert");
+const ngrok = require('ngrok');
 
 const WPT_BUDGET = core.getInput('budget');
 const WPT_OPTIONS = core.getInput('wptOptions');
@@ -13,6 +14,12 @@ const WPT_LABEL = core.getInput('label');
 const GITHUB_TOKEN = core.getInput('GITHUB_TOKEN');
 const DIRECTORY = process.env.GITHUB_WORKSPACE;
 const GH_EVENT_NAME = process.env.GITHUB_EVENT_NAME;
+
+(async function() {
+    WPT_URLS = await ngrok.connect(9000);
+    // process.env.WPT_URL = url;
+    // console.log(process.env.WPT_URL)
+  })();
 const METRICS = {
     "TTFB": "Time to First Byte",
     "firstContentfulPaint": "First Contentful Paint",
