@@ -82,7 +82,7 @@ function collectData(results, runData) {
         "url": results.data.url,
         "testLink": results.data.summary,
         "waterfall": results.data.median.firstView.images.waterfall,
-        "screenshot":results.data.runs["1"].firstView.pages.screenshot,
+        "screenshot":results.data.median.firstView.images.screenShot,
         "metrics": []
     }
     for (const [key, value] of Object.entries(METRICS)) {
