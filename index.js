@@ -8,8 +8,7 @@ const ngrok = require('ngrok');
 
 const WPT_BUDGET = core.getInput('budget');
 const WPT_OPTIONS = core.getInput('wptOptions');
-// const WPT_API_KEY = core.getInput('apiKey');
-const WPT_API_KEY = '3ca739daa5ef49b68cad94b71c92e9d0'
+const WPT_API_KEY = core.getInput('apiKey');
 let WPT_URLS = core.getInput('urls').split("\n");
 const WPT_LABEL = core.getInput('label');
 const GITHUB_TOKEN = core.getInput('GITHUB_TOKEN');
