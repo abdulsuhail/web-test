@@ -257,5 +257,5 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           with_ngrok: true
 ```
-You can also pass the urls options to test urls other than the one passed using ngrok.
-Note : - Above is an example for building and running a react project, feel free to add commands required for you to build and start your project.
+You can also pass the urls options to test urls other than the one passed using ngrok. \n
+#### Note : - Above is an example for building and running a react project, feel free to add/update commands required for you to build and start your project.
