@@ -180,7 +180,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           with_ngrok: true
 ```
-And a shell script to start ngrok
+And a shell script to start ngrok in your repository.
 ```
 #!/bin/sh
 
