@@ -150,8 +150,9 @@ And a `wpt-options.json` file containing:
 ```
 
 The defaults values for the number of runs, location, and connectivity type would all be overwritten by the settings specified here. In addition, any ads defined by https://adblockplus.org/ would be automatically blocked.
+
 ### Running WebPageTest on recently pushed code
-WebPageTest gihub-action supports testing the code on a local machine. To use this functionality follow the below steps : -
+WebPageTest gihub-action supports testing the website running on a local machine, which can come in handy as this check can be used to determine the performance pre-deployment. To use this functionality follow the below steps : -
   * Use node setup to install ngrok using npm.
  ```           
       - name: Node Setup
