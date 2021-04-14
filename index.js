@@ -139,12 +139,12 @@ async function run() {
     runData["tests"] = [];
     // console.log
     
-    if(!WPT_URLS[0])
-    {
-        WPT_URLS = [];
-        let url = await urlFinder.getUrl();
-        WPT_URLS.push(url)
-    }
+    // if(!WPT_URLS[0])
+    // {
+    //     WPT_URLS = [];
+    //     let url = await urlFinder.getUrl();
+    //     WPT_URLS.push(url)
+    // }
     // WPT_URLS = WPT_URLS[0] ? WPT_URLS : await ngrok.connect(9000);
     console.log(WPT_URLS)
     Promise.all(WPT_URLS.map(async url=> {
