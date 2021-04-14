@@ -150,3 +150,59 @@ And a `wpt-options.json` file containing:
 ```
 
 The defaults values for the number of runs, location, and connectivity type would all be overwritten by the settings specified here. In addition, any ads defined by https://adblockplus.org/ would be automatically blocked.
+### Running WebPageTest on currently pushed code
+WebPageTest can be run on your currently pushed code, can be used as check before the code gets merged on master. This functionality uses ngrok to run the code on the github runner. For example : - 
+```yml
+on: [pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: WebPageTest Action
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        
+      - name: Node Setup
+        uses: actions/setup-node@v1
+        
+      - name: Download ngrok
+        run: npm install ngrok -g
+
+      - name: Start ngrok in background
+        run: source start-ngrok.sh 9000
+      
+      - name: WebPageTest
+        uses: WPO-Foundation/webpagetest-github-action@main
+        with:
+          apiKey: ${{ secrets.WPT_API_KEY }}
+          label: 'GitHub Action Test'
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          with_ngrok: true
+```
+And a shell script to start ngrok
+```
+#!/bin/sh
+
+# Set local port from command line arg or default to 8080
+LOCAL_PORT=${1-8080}
+
+echo "Start ngrok in background on port [ $LOCAL_PORT ]"
+nohup ngrok http ${LOCAL_PORT} &>/dev/null &
+
+echo -n "Extracting ngrok public url ."
+NGROK_PUBLIC_URL=""
+while [ -z "$NGROK_PUBLIC_URL" ]; do
+  # Run 'curl' against ngrok API and extract public (using 'sed' command)
+  export NGROK_PUBLIC_URL=$(curl --silent --max-time 10 --connect-timeout 5 \
+                            --show-error http://127.0.0.1:4040/api/tunnels | \
+                            sed -nE 's/.*public_url":"https:..([^"]*).*/\1/p')
+  sleep 1
+  echo -n "."
+done
+
+echo
+echo "NGROK_PUBLIC_URL => [ $NGROK_PUBLIC_URL ]"
+
+```
+You can pass url option too if you want to test other urls too with you local one.
