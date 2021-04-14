@@ -2,8 +2,6 @@ const http = require("http");
 const { execSync } = require("child_process");
 const { resolve } = require("path");
 const { rejects } = require("assert");
-const core = require("@actions/core");
-
 
 exports.getUrl = () =>{
 
@@ -14,7 +12,6 @@ exports.getUrl = () =>{
             res.on("end", () => {
                 const resJSON = JSON.parse(data);
                 const tunnels = resJSON.tunnels;
-                core.info("ngrok output :- ",tunnels.find(({ proto }) => proto === "https"))
                 const { public_url: url } = tunnels.find(({ proto }) => proto === "https");
                 resolve(url)
                 
