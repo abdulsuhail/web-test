@@ -8,6 +8,7 @@ const urlFinder = require('./fetchUrl');
 const WPT_BUDGET = core.getInput('budget');
 const WPT_OPTIONS = core.getInput('wptOptions');
 const WPT_API_KEY = core.getInput('apiKey');
+const WITH_NGROK = core.getInput('with_ngrok');
 let WPT_URLS = core.getInput('urls').split("\n");
 const WPT_LABEL = core.getInput('label');
 const GITHUB_TOKEN = core.getInput('GITHUB_TOKEN');
@@ -139,14 +140,12 @@ async function run() {
     runData["tests"] = [];
     // console.log
     
-    // if(!WPT_URLS[0])
-    // {
-    //     WPT_URLS = [];
-    //     let url = await urlFinder.getUrl();
-    //     WPT_URLS.push(url)
-    // }
-    // WPT_URLS = WPT_URLS[0] ? WPT_URLS : await ngrok.connect(9000);
-    console.log(WPT_URLS)
+    if(WITH_NGROK)
+    {
+        WPT_URLS = [];
+        let url = await urlFinder.getUrl();
+        WPT_URLS.push(url)
+    }
     Promise.all(WPT_URLS.map(async url=> {
         try {
             await runTest(wpt, url, options)
