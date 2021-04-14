@@ -142,9 +142,15 @@ async function run() {
     
     if(WITH_NGROK)
     {
-        WPT_URLS = [];
         let url = await urlFinder.getUrl();
-        WPT_URLS.push(url)
+        if(WPT_URLS[0])
+        {
+            WPT_URLS.push(url);
+        }
+        else{
+            WPT_URLS=[];
+            WPT_URLS.push(url);
+        }
     }
     Promise.all(WPT_URLS.map(async url=> {
         try {
