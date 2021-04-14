@@ -139,7 +139,9 @@ async function run() {
     let runData = {};
     runData["tests"] = [];
     // console.log
-    core.info("with ngrok value :-",WITH_NGROK)
+    core.info("with ngrok value :-"+ WITH_NGROK)
+
+    console.log("with ngrok value :-"+ WITH_NGROK)
     if(WITH_NGROK)
     {
         let url = await urlFinder.getUrl();
