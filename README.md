@@ -256,4 +256,4 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           with_ngrok: true
 ```
-You can also pass urls to test other urls with the local ones.
+You can also pass urls to test other urls with the one used from ngrok.
