@@ -19,6 +19,8 @@ inputs:
     required: false
   GITHUB_TOKEN:
     description: 'Secret GitHub Token (automatically provided by GitHub)'
+  with_ngrok:
+    description: 'Boolean value if ngrok url needs to be used for WebPageTest'
 runs:
   using: 'node12'
   main: 'index.js'
