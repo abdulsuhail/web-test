@@ -142,7 +142,7 @@ async function run() {
     core.info("with ngrok value :-"+ WITH_NGROK)
 
     console.log("with ngrok value :-"+typeof  WITH_NGROK)
-    if(WITH_NGROK)
+    if(WITH_NGROK=="true")
     {
         let url = await urlFinder.getUrl();
         if(WPT_URLS[0])
