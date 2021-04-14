@@ -150,28 +150,38 @@ And a `wpt-options.json` file containing:
 ```
 
 The defaults values for the number of runs, location, and connectivity type would all be overwritten by the settings specified here. In addition, any ads defined by https://adblockplus.org/ would be automatically blocked.
-### Running WebPageTest on currently pushed code
-WebPageTest can be run on your currently pushed code, can be used as check before the code gets merged on master. This functionality uses ngrok to run the code on the github runner. For example : - 
-```yml
-on: [pull_request]
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    name: WebPageTest Action
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-        
+### Running WebPageTest on recently pushed code
+To use this functionality you need to follow the below steps : -
+  * Use node setup to install ngrok using npm.
+ ```           
       - name: Node Setup
         uses: actions/setup-node@v1
-        
+  ```    
+  * Start your project in the github runner(below yml file is an example for building and running react.js project using pm2).
+```
+      - name: Install Project Dependencies
+        run: npm install
+
+      - name: Run Build
+        run: npm run build
+
+      - name: Install pm2
+        run: npm install pm2@latest -g
+
+      - name: Start App
+        run: pm2 start app.js 
+       
+```
+  * Next step is downloading and starting ngrok.
+``` 
       - name: Download ngrok
         run: npm install ngrok -g
 
       - name: Start ngrok in background
         run: source start-ngrok.sh 9000
-      
+```
+  * Add the with_ngrok option in WebPageTest action and pass the value as true.
+```
       - name: WebPageTest
         uses: WPO-Foundation/webpagetest-github-action@main
         with:
@@ -180,7 +190,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           with_ngrok: true
 ```
-And a shell script to start ngrok in your repository.
+And the below shell script to start ngrok in your repository.
 ```
 #!/bin/sh
 
@@ -205,4 +215,45 @@ echo
 echo "NGROK_PUBLIC_URL => [ $NGROK_PUBLIC_URL ]"
 
 ```
-You can pass url option too if you want to test other urls too with you local one.
+Below is a full example of yml. 
+```yml
+on: [pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: WebPageTest Action
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        
+      - name: Node Setup
+        uses: actions/setup-node@v1
+
+      - name: Install Project Dependencies
+        run: npm install
+
+      - name: Run Build
+        run: npm run build
+
+      - name: Install pm2
+        run: npm install pm2@latest -g
+
+      - name: Start App
+        run: pm2 start app.js 
+              
+      - name: Download ngrok
+        run: npm install ngrok -g
+
+      - name: Start ngrok in background
+        run: source start-ngrok.sh 9000
+      
+      - name: WebPageTest
+        uses: WPO-Foundation/webpagetest-github-action@main
+        with:
+          apiKey: ${{ secrets.WPT_API_KEY }}
+          label: 'GitHub Action Test'
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          with_ngrok: true
+```
+You can also pass urls to test other urls with the local ones.
