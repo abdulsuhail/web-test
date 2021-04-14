@@ -151,13 +151,13 @@ And a `wpt-options.json` file containing:
 
 The defaults values for the number of runs, location, and connectivity type would all be overwritten by the settings specified here. In addition, any ads defined by https://adblockplus.org/ would be automatically blocked.
 ### Running WebPageTest on recently pushed code
-To use this functionality you need to follow the below steps : -
+WebPageTest gihub-action supports testing the code on a local machine. To use this functionality follow the below steps : -
   * Use node setup to install ngrok using npm.
  ```           
       - name: Node Setup
         uses: actions/setup-node@v1
   ```    
-  * Start your project in the github runner(below yml file is an example for building and running react.js project using pm2).
+  * Start your project in the github runner(below is an example for building and running react.js project using pm2). You can use your respective commands dependent to your language to start the project. Make sure to run the project in background as running it in foreground would not allow the next steps to execute. Here pm2 is used to run the project in the background.
 ```
       - name: Install Project Dependencies
         run: npm install
@@ -172,7 +172,7 @@ To use this functionality you need to follow the below steps : -
         run: pm2 start app.js 
        
 ```
-  * Next step is downloading and starting ngrok.
+  * Next step is downloading and starting ngrok. The step to start ngrok takes a shell script which is mentioned below.
 ``` 
       - name: Download ngrok
         run: npm install ngrok -g
@@ -180,7 +180,7 @@ To use this functionality you need to follow the below steps : -
       - name: Start ngrok in background
         run: source start-ngrok.sh 9000
 ```
-  * Add the with_ngrok option in WebPageTest action and pass the value as true.
+  * Add "with_ngrok" option in WebPageTest action and pass the value as true.
 ```
       - name: WebPageTest
         uses: WPO-Foundation/webpagetest-github-action@main
@@ -190,7 +190,7 @@ To use this functionality you need to follow the below steps : -
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           with_ngrok: true
 ```
-And the below shell script to start ngrok in your repository.
+And the below shell script in your repository to start ngrok.
 ```
 #!/bin/sh
 
@@ -215,7 +215,7 @@ echo
 echo "NGROK_PUBLIC_URL => [ $NGROK_PUBLIC_URL ]"
 
 ```
-Below is a full example of yml. 
+Below is a full example of yml file. 
 ```yml
 on: [pull_request]
 
@@ -257,3 +257,4 @@ jobs:
           with_ngrok: true
 ```
 You can also pass the urls options to test urls other than the one passed using ngrok.
+Note : - Above is an example for building and running a react project, feel free to add commands required for you to build and start your project.
